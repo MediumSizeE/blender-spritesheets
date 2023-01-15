@@ -33,6 +33,9 @@ class RenderSpriteSheet(bpy.types.Operator):
         progressProps.rendering = True
         progressProps.success = False
         progressProps.actionTotal = len(bpy.data.actions)
+        actions = [strip.action for item in bpy.context.object.animation_data.nla_tracks.values() for strip in item.strips.values()]
+        print("Actions: ")
+        print(actions)
 
         cameraProps = scene.CameraPropertyGroup
 
@@ -44,10 +47,11 @@ class RenderSpriteSheet(bpy.types.Operator):
         # rust assembler combines in alphabetical order
         anim_dir_order = deepcopy(CameraSettingsFactory.anim_suffix)
         anim_dir_order.sort()
-        actions_sorted = [action for action in bpy.data.actions]
-        actions_sorted.sort(key=lambda action: action.name)
+        # actions_sorted = [action for action in bpy.data.actions]
+        # actions_sorted = [action for action in bpy.data.actions]
+        actions.sort(key=lambda action: action.name)
 
-        for index, action in enumerate(actions_sorted):
+        for index, action in enumerate(actions):
             progressProps.actionName = action.name
             progressProps.actionIndex = index
             objectToRender.animation_data.action = action
